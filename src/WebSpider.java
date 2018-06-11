@@ -75,6 +75,13 @@ public class WebSpider {
 						final URL discoveredURL = new URL(urlText);
 						newURLS.add(discoveredURL);
 					}
+					
+					// Sleep for the delay time
+					try {
+						Thread.sleep(delay);
+					} catch (InterruptedException e) {
+						// No catch needed
+					}
 				}
 			} catch (Exception e) {
 				// Probably just a bad url but we want to keep crawling
@@ -85,18 +92,23 @@ public class WebSpider {
 	}
 
 	public static void help() {
-		System.out.println("Insert help here.");
+		System.out.println("Syntax: WebSpider.jar {args} {Start URL}\n"
+				+ "--help/-h Displays help\n"
+				+ "--domain Domain only mode\n"
+				+ "--save/-s {file name} Enable logging of the URLS\n"
+				+ "--recursion/-r {times} How many times the loop should run (default is int.max_value)\n"
+				+ "--delay/-d {delay in ms} How long to sleep between looping");
 		System.exit(0);
 	}
 
 	public static void main(String[] args) {
-//		for (String arg : args) {
-			// I was going to do something here but now I forget
+//		for (String arg : args) { For debugging only
+//			System.out.println(arg);
 //		}
 		
 		// Check to make sure valid args were suplied
-		if (args.length == 0 || !args[0].startsWith("http")) {
-			System.out.println("Invalid args. WebSpider.jar {Start URL} {args}");
+		if (args.length == 0 || !args[args.length - 1].startsWith("http")) {
+			System.out.println("Invalid args. WebSpider.jar {args} {Start URL}");
 			System.exit(0);
 		}
 		
@@ -140,7 +152,7 @@ public class WebSpider {
 		
 		// Start the crawler
 		try {
-			new WebSpider(new URL(args[0]));
+			new WebSpider(new URL(args[args.length - 1]));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			System.out.println("An invalid URL has been detected.");
